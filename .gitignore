@@ -1,0 +1,8 @@
+organizations
+system-genesis-block
+channel-artifacts
+vendor
+*/pkg/*.tar.gz
+chaincode/*/*/*.tar.gz
+bin
+config

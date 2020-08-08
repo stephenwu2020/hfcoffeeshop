@@ -1,0 +1,21 @@
+OrdererOrgs:
+  - Name: CA4
+    Domain: demo.com
+    Specs:
+      - Hostname: o4
+
+PeerOrgs:
+  - Name: CA1
+    Domain: r1.demo.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 2
+  - Name: CA2
+    Domain: r2.demo.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 2
