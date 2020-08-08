@@ -4,8 +4,8 @@ networks:
   basic:
 
 services:
-  o4.demo.com:
-    container_name: o4.demo.com
+  orderer.coffeeshop.com:
+    container_name: orderer.coffeeshop.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
       - FABRIC_LOGGING_SPEC=info
@@ -30,9 +30,9 @@ services:
       - 7050:7050
     volumes:
         - ./system-genesis-block/:/etc/hyperledger/configtx
-        - ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/:/etc/hyperledger/msp/orderer
-        - ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/msp:/etc/hyperledger/orderer/msp
-        - ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/tls/:/etc/hyperledger/orderer/tls
+        - ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/:/etc/hyperledger/msp/orderer
+        - ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/msp:/etc/hyperledger/orderer/msp
+        - ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/tls/:/etc/hyperledger/orderer/tls
 
     networks:
       - basic
