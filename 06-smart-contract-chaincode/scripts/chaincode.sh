@@ -3,19 +3,13 @@
 MODE=$1
 CHANNEL_NAME="c1"
 CHAINCODE_NAME="mycc"
-CAFILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/msp/tlscacerts/tlsca.demo.com-cert.pem
+CAFILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/msp/tlscacerts/tlsca.coffeeshop.com-cert.pem
 
 # r1 env
-R1MSP=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r1.demo.com/users/Admin@r1.demo.com/msp
-R1ADDR=peer0.r1.demo.com:7051
-R1MSPID="R1"
-R1CRT=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r1.demo.com/peers/peer0.r1.demo.com/tls/ca.crt 
-
-# r2 env
-R2MSP=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r2.demo.com/users/Admin@r2.demo.com/msp
-R2ADDR=peer0.r2.demo.com:7051
-R2MSPID="R2"
-R2CRT=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r2.demo.com/peers/peer0.r2.demo.com/tls/ca.crt 
+R1MSP=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/users/Admin@ming.coffeeshop.com/msp
+R1ADDR=peer0.ming.coffeeshop.com:7051
+R1MSPID="MingMSP"
+R1CRT=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/peers/peer0.ming.coffeeshop.com/tls/ca.crt 
 
 function help(){
   echo "Usage: "
@@ -29,7 +23,7 @@ function help(){
   echo "  - afterCommit"
   echo "  - invoke"
   echo "  - query"
-  echo "  - start"
+  echo "  - custom"
 }
 
 function package(){
@@ -61,13 +55,6 @@ function install(){
   CORE_PEER_TLS_ROOTCERT_FILE=${R1CRT}
   peer lifecycle chaincode install /opt/gopath/src/github.com/hyperledger/fabric/peer/pkg/${CHAINCODE_NAME}.tar.gz
 
-  # install on peer of r2
-  CORE_PEER_MSPCONFIGPATH=${R2MSP}
-  CORE_PEER_ADDRESS=${R2ADDR}
-  CORE_PEER_LOCALMSPID=${R2MSPID}
-  CORE_PEER_TLS_ROOTCERT_FILE=${R2CRT}
-  peer lifecycle chaincode install /opt/gopath/src/github.com/hyperledger/fabric/peer/pkg/${CHAINCODE_NAME}.tar.gz
-
 }
 
 function approve(){
@@ -91,22 +78,7 @@ function approve(){
     --sequence 1 \
     --tls \
     --cafile $CAFILE
-
-
-  # approve r2
-  CORE_PEER_MSPCONFIGPATH=${R2MSP}
-  CORE_PEER_ADDRESS=${R2ADDR}
-  CORE_PEER_LOCALMSPID=${R2MSPID}
-  CORE_PEER_TLS_ROOTCERT_FILE=${R2CRT}
-  peer lifecycle chaincode approveformyorg \
-    --channelID $CHANNEL_NAME \
-    --name ${CHAINCODE_NAME} \
-    --version 1.0 \
-    --init-required \
-    --package-id $PACKAGE_ID \
-    --sequence 1 \
-    --tls \
-    --cafile $CAFILE
+ 
 }
 
 function beforeCommit(){
@@ -122,7 +94,7 @@ function beforeCommit(){
 
 function commit(){
   peer lifecycle chaincode commit \
-    -o o4.demo.com:7050 \
+    -o orderer.coffeeshop.com:7050 \
     --channelID $CHANNEL_NAME \
     --name ${CHAINCODE_NAME} \
     --version 1.0 \
@@ -130,10 +102,8 @@ function commit(){
     --init-required \
     --tls true \
     --cafile $CAFILE \
-    --peerAddresses peer0.r1.demo.com:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r1.demo.com/peers/peer0.r1.demo.com/tls/ca.crt \
-    --peerAddresses peer0.r2.demo.com:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r2.demo.com/peers/peer0.r2.demo.com/tls/ca.crt
+    --peerAddresses peer0.ming.coffeeshop.com:7051 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/peers/peer0.ming.coffeeshop.com/tls/ca.crt 
 }
 
 function afterCommit(){
@@ -142,16 +112,14 @@ function afterCommit(){
 
 function invoke(){
   peer chaincode invoke \
-    -o o4.demo.com:7050 \
+    -o orderer.coffeeshop.com:7050 \
     --isInit \
     --tls \
     --cafile $CAFILE \
     -C $CHANNEL_NAME \
     -n ${CHAINCODE_NAME} \
-    --peerAddresses peer0.r1.demo.com:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r1.demo.com/peers/peer0.r1.demo.com/tls/ca.crt \
-    --peerAddresses peer0.r2.demo.com:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/r2.demo.com/peers/peer0.r2.demo.com/tls/ca.crt \
+    --peerAddresses peer0.ming.coffeeshop.com:7051 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/peers/peer0.ming.coffeeshop.com/tls/ca.crt \
     -c '{"Args":["Init","a","100","b","100"]}' \
     --waitForEvent
 }
@@ -178,7 +146,7 @@ elif [ "$MODE" == "debug" ]; then
   debug
 elif [ "$MODE" == "query" ]; then
   query
-elif [ "$MODE" == "start" ]; then
+elif [ "$MODE" == "custom" ]; then
   package
   install
   approve

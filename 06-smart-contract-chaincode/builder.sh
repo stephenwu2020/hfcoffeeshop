@@ -41,6 +41,7 @@ case "$MODE" in
   "custom")
     ./builder.sh network custom
     ./builder.sh channel custom
+    ./builder.sh chaincode custom
     ;;
   "clear")
     ./builder.sh network clear
