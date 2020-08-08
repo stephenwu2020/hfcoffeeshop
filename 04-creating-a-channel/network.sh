@@ -18,7 +18,7 @@ function help(){
   echo "  - createChan"
   echo "  - down"
   echo "  - clear"
-  echo "  - customs"
+  echo "  - custom"
 }
 
 case "$MODE" in

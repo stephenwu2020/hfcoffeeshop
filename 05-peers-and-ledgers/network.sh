@@ -21,7 +21,7 @@ function help(){
   echo "  - listChan"
   echo "  - down"
   echo "  - clear"
-  echo "  - customs"
+  echo "  - custom"
 }
 
 function joinChan(){

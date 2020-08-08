@@ -1,10 +1,11 @@
 #!/bin/bash
 
 MODE=$1
-CHANNEL_NAME="c1"
-FABRIC_CFG_PATH=$PWD
 CRYPTOGEN=../bin/cryptogen
 CONFIGTXGEN=../bin/configtxgen
+CHANNEL_NAME="c1"
+FABRIC_CFG_PATH=$PWD
+CAFILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/msp/tlscacerts/tlsca.coffeeshop.com-cert.pem
 
 function help(){
   echo "Usage: "
@@ -12,11 +13,11 @@ function help(){
   echo "cmd: "
   echo "  - crypto"
   echo "  - genesis"
-  echo "  - channeltx"
   echo "  - up"
+  echo "  - createChanTx"
   echo "  - down"
   echo "  - clear"
-  echo "  - start"
+  echo "  - custom"
 }
 
 function genCrypto(){
@@ -24,60 +25,53 @@ function genCrypto(){
 }
 
 function genGenesis(){
-  ${CONFIGTXGEN} -profile NC4 -channelID ordererchannel -outputBlock ./system-genesis-block/genesis.block
+  ${CONFIGTXGEN} -profile Genesis -channelID ordererchannel -outputBlock ./system-genesis-block/genesis.block
 }
 
-function genChanTx(){
-  # channel tx
+function createChanTx(){
   ${CONFIGTXGEN} -profile CC1 -outputCreateChannelTx ./channel-artifacts/${CHANNEL_NAME}.tx -channelID $CHANNEL_NAME
-  # r1 anchor tx
-  ${CONFIGTXGEN} -profile CC1 \
-    -outputAnchorPeersUpdate ./channel-artifacts/R1MSPanchors.tx \
-    -channelID $CHANNEL_NAME \
-    -asOrg R1
-  # r2 anchor tx
-  ${CONFIGTXGEN} -profile CC1 \
-    -outputAnchorPeersUpdate ./channel-artifacts/R2MSPanchors.tx \
-    -channelID $CHANNEL_NAME \
-    -asOrg R2
 }
 
-function networkUp(){
+function up(){
   docker-compose up -d
 }
 
-function networkDown(){
+function down(){
   docker-compose down
 }
 
 function clear(){
+  down
   rm -rf organizations system-genesis-block channel-artifacts
-  docker rm -f $(docker ps -qa) 
 }
 
-if [ "$MODE" == "crypto" ]; then
-  genCrypto
-elif [ "$MODE" == "genesis" ]; then
-  genGenesis
-elif [ "$MODE" == "channeltx" ]; then
-  genChanTx
-elif [ "$MODE" == "chaincode" ]; then
-  execChaincode $2
-elif [ "$MODE" == "channel" ]; then
-  execChannel $2
-elif [ "$MODE" == "up" ]; then
-  networkUp
-elif [ "$MODE" == "down" ]; then
-  networkDown
-elif [ "$MODE" == "clear" ]; then
-  clear
-elif [ "$MODE" == "start" ]; then
-  genCrypto
-  genGenesis
-  genChanTx
-  networkUp
-  genChanTx
-else        
-  help
-  exit 1
-fi
+case "$MODE" in
+  "crypto")
+    genCrypto
+    ;;
+  "genesis")
+    genGenesis
+    ;;
+  "createChanTx")
+    createChanTx
+    ;;
+  "up")
+    up
+    ;;
+  "down")
+    down
+    ;;
+  "clear")
+    clear
+    ;;
+   "custom")
+    clear
+    genCrypto
+    genGenesis
+    createChanTx
+    up
+    ;;
+  *)
+    help
+    exit 1
+esac

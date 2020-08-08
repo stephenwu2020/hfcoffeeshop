@@ -2,7 +2,6 @@
 
 MODE=$1
 CHANNEL_NAME="c1"
-TAG="2.0.0"
 FABRIC_CFG_PATH=$PWD
 
 function help(){
@@ -35,17 +34,6 @@ elif [ "$MODE" == "channel" ]; then
   execChannel $2
 elif [ "$MODE" == "chaincode" ]; then
   execChaincode $2
-elif [ "$MODE" == "start" ]; then
-  execNetwork start
-  echo "sleep 5 second ..."
-  sleep 5
-  execChannel start
-  echo "sleep 5 second ..."
-  sleep 5
-  execChaincode start
-elif [ "$MODE" == "end" ]; then
-  execNetwork down
-  execNetwork clear
 else        
   help
   exit 1
