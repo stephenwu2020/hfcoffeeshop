@@ -1,18 +1,18 @@
 Organizations:
-    - &R4
-        Name: R4
-        ID: R4
-        MSPDir: ./organizations/ordererOrganizations/demo.com/msp
+    - &Orderer
+        Name: Orderer
+        ID: OrdererMSP
+        MSPDir: ./organizations/ordererOrganizations/coffeeshop.com/msp
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('R4.member')"
+                Rule: "OR('OrdererMSP.member')"
             Writers:
                 Type: Signature
-                Rule: "OR('R4.member')"
+                Rule: "OR('OrdererMSP.member')"
             Admins:
                 Type: Signature
-                Rule: "OR('R4.admin')"
+                Rule: "OR('OrdererMSP.admin')"
 
 Capabilities:
     Channel: &ChannelCapabilities
@@ -49,12 +49,12 @@ Orderer: &OrdererDefaults
 
     EtcdRaft:
         Consenters:
-        - Host: o4.demo.com
+        - Host: orderer.coffeeshop.com
           Port: 7050
-          ClientTLSCert: ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/tls/server.crt
-          ServerTLSCert: ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/tls/server.crt
+          ClientTLSCert: ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/tls/server.crt
+          ServerTLSCert: ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/tls/server.crt
     Addresses:
-        - o4.demo.com:7050
+        - orderer.coffeeshop.com:7050
     BatchTimeout: 2s
     BatchSize:
         MaxMessageCount: 10
@@ -95,7 +95,7 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *R4
+                - *Orderer
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:

@@ -1,5 +1,8 @@
 OrdererOrgs:
-  - Name: CA4
-    Domain: demo.com
+  - Name: Orderer
+    Domain: coffeeshop.com
+    EnableNodeOUs: true
     Specs:
-      - Hostname: o4
+      - Hostname: orderer
+        SANS:
+          - localhost
