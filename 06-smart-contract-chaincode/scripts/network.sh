@@ -30,6 +30,10 @@ function genGenesis(){
 
 function createChanTx(){
   ${CONFIGTXGEN} -profile CC1 -outputCreateChannelTx ./channel-artifacts/${CHANNEL_NAME}.tx -channelID $CHANNEL_NAME
+  ${CONFIGTXGEN} -profile CC1 \
+    -outputAnchorPeersUpdate ./channel-artifacts/MingAnchors.tx \
+    -channelID $CHANNEL_NAME \
+    -asOrg Ming
 }
 
 function up(){

@@ -8,11 +8,11 @@ function help(){
   echo "Usage: "
   echo "  network.sh <cmd>"
   echo "cmd: "
-  echo "  - start"
-  echo "  - end"
   echo "  - network"
   echo "  - channel"
   echo "  - chaincode"
+  echo "  - custom"
+  echo "  - clear"
 }
 
 function execNetwork(){
@@ -28,13 +28,24 @@ function execChannel(){
 }
 
 
-if [ "$MODE" == "network" ]; then
-  execNetwork $2
-elif [ "$MODE" == "channel" ]; then
-  execChannel $2
-elif [ "$MODE" == "chaincode" ]; then
-  execChaincode $2
-else        
-  help
-  exit 1
-fi
+case "$MODE" in
+  "network")
+    execNetwork $2
+    ;;
+  "channel")
+    execChannel $2
+    ;;
+  "chaincode")
+    execChaincode $2
+    ;;
+  "custom")
+    ./builder.sh network custom
+    ./builder.sh channel custom
+    ;;
+  "clear")
+    ./builder.sh network clear
+    ;;
+  *)
+    help
+    exit 1
+esac

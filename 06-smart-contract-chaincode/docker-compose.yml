@@ -61,6 +61,9 @@ services:
         - /var/run/:/host/var/run/
         - ./organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+        - ./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric-samples/chaincode
+        - ./pkg:/opt/gopath/src/github.com/hyperledger/fabric/peer/pkg
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     depends_on:
       - orderer.coffeeshop.com
     networks:
