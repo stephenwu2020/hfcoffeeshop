@@ -1,35 +1,35 @@
 Organizations:
-    - &R4
-        Name: R4
-        ID: R4
-        MSPDir: ./organizations/ordererOrganizations/demo.com/msp
+    - &Orderer
+        Name: Orderer
+        ID: OrdererMSP
+        MSPDir: ./organizations/ordererOrganizations/coffeeshop.com/msp
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('R4.member')"
+                Rule: "OR('OrdererMSP.member')"
             Writers:
                 Type: Signature
-                Rule: "OR('R4.member')"
+                Rule: "OR('OrdererMSP.member')"
             Admins:
                 Type: Signature
-                Rule: "OR('R4.admin')"
-    - &R1
-        Name: R1
-        ID: R1
-        MSPDir: ./organizations/peerOrganizations/r1.demo.com/msp
+                Rule: "OR('OrdererMSP.admin')"
+    - &Ming
+        Name: Ming
+        ID: MingMSP
+        MSPDir: ./organizations/peerOrganizations/ming.coffeeshop.com/msp
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('R1.admin', 'R1.peer', 'R1.client')"
+                Rule: "OR('Ming.admin', 'Ming.peer', 'Ming.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('R1.admin', 'R1.client')"
+                Rule: "OR('Ming.admin', 'Ming.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('R1.admin')"
+                Rule: "OR('Ming.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('R1.peer')"
+                Rule: "OR('Ming.peer')"
 
 Capabilities:
     Channel: &ChannelCapabilities
@@ -66,12 +66,12 @@ Orderer: &OrdererDefaults
 
     EtcdRaft:
         Consenters:
-        - Host: o4.demo.com
+        - Host: orderer.coffeeshop.com
           Port: 7050
-          ClientTLSCert: ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/tls/server.crt
-          ServerTLSCert: ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/tls/server.crt
+          ClientTLSCert: ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/tls/server.crt
+          ServerTLSCert: ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/tls/server.crt
     Addresses:
-        - o4.demo.com:7050
+        - orderer.coffeeshop.com:7050
     BatchTimeout: 2s
     BatchSize:
         MaxMessageCount: 10
@@ -107,13 +107,13 @@ Channel: &ChannelDefaults
         <<: *ChannelCapabilities
 
 Profiles:
-    NC4:
+    Genesis:
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *R4
-                - *R1
+                - *Orderer
+                - *Ming
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:

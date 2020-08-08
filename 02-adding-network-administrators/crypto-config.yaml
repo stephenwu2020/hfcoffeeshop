@@ -1,12 +1,15 @@
 OrdererOrgs:
-  - Name: CA4
-    Domain: demo.com
+  - Name: Orderer
+    Domain: coffeeshop.com
+    EnableNodeOUs: true
     Specs:
-      - Hostname: o4
+      - Hostname: orderer
+        SANS:
+          - localhost
 
 PeerOrgs:
-  - Name: CA1
-    Domain: r1.demo.com
+  - Name: Ming
+    Domain: ming.coffeeshop.com
     EnableNodeOUs: true
     Template:
       Count: 1

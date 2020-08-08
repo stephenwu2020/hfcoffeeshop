@@ -13,6 +13,7 @@ function help(){
   echo "  - up"
   echo "  - down"
   echo "  - clear"
+  echo "  - custom"
 }
 
 case "$MODE" in
@@ -20,7 +21,7 @@ case "$MODE" in
     ${CRYPTOGEN} generate --config=./crypto-config.yaml --output="organizations"
     ;;
   "genesis")
-    ${CONFIGTXGEN} -profile NC4 -channelID ordererchannel -outputBlock ./system-genesis-block/genesis.block
+    ${CONFIGTXGEN} -profile Genesis -channelID ordererchannel -outputBlock ./system-genesis-block/genesis.block
     ;;
   "up")
     docker-compose up -d
@@ -30,6 +31,13 @@ case "$MODE" in
     ;;
   "clear")
     rm -rf organizations system-genesis-block
+    ;;
+  "custom")
+    ./network.sh down
+    ./network.sh clear
+    ./network.sh crypto
+    ./network.sh genesis
+    ./network.sh up 
     ;;
   *)
     help
