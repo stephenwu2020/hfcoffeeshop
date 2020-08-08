@@ -90,7 +90,7 @@ Channel: &ChannelDefaults
         <<: *ChannelCapabilities
 
 Profiles:
-    NC4:
+    Genesis:
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
