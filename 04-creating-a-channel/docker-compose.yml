@@ -4,16 +4,16 @@ networks:
   basic:
 
 services:
-  o4.demo.com:
-    container_name: o4.demo.com
+  orderer.coffeeshop.com:
+    container_name: orderer.coffeeshop.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
       - FABRIC_LOGGING_SPEC=info
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_BOOTSTRAPMETHOD=file
       - ORDERER_GENERAL_BOOTSTRAPFILE=/etc/hyperledger/configtx/genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=R4
-      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/orderer/msp
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
         # enabled TLS
       - ORDERER_GENERAL_TLS_ENABLED=true
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/orderer/tls/server.key
@@ -29,9 +29,10 @@ services:
     ports:
       - 7050:7050
     volumes:
-        - ./system-genesis-block:/etc/hyperledger/configtx
-        - ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/msp:/etc/hyperledger/orderer/msp
-        - ./organizations/ordererOrganizations/demo.com/orderers/o4.demo.com/tls/:/etc/hyperledger/orderer/tls
+        - ./system-genesis-block/:/etc/hyperledger/configtx
+        - ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/:/etc/hyperledger/msp/orderer
+        - ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/msp:/etc/hyperledger/orderer/msp
+        - ./organizations/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/tls/:/etc/hyperledger/orderer/tls
 
     networks:
       - basic
@@ -47,13 +48,13 @@ services:
       #- FABRIC_LOGGING_SPEC=DEBUG
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.r1.demo.com:7051
-      - CORE_PEER_LOCALMSPID=R1
+      - CORE_PEER_ADDRESS=ming.coffeeshop.com:7051
+      - CORE_PEER_LOCALMSPID=MingMSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/r1.demo.com/peers/peer0.r1.demo.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/r1.demo.com/peers/peer0.r1.demo.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/r1.demo.com/peers/peer0.r1.demo.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/r1.demo.com/users/Admin@r1.demo.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/peers/peer0.ming.coffeeshop.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/peers/peer0.ming.coffeeshop.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/peers/peer0.ming.coffeeshop.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/ming.coffeeshop.com/users/Admin@ming.coffeeshop.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
@@ -61,6 +62,6 @@ services:
         - ./organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - o4.demo.com
+      - orderer.coffeeshop.com
     networks:
       - basic

@@ -20,16 +20,16 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Ming.admin', 'Ming.peer', 'Ming.client')"
+                Rule: "OR('MingMSP.admin', 'MingMSP.peer', 'MingMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Ming.admin', 'Ming.client')"
+                Rule: "OR('MingMSP.admin', 'MingMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('Ming.admin')"
+                Rule: "OR('MingMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('Ming.peer')"
+                Rule: "OR('MingMSP.peer')"
 
 Capabilities:
     Channel: &ChannelCapabilities
