@@ -18,6 +18,7 @@ function help(){
   echo "  - createChan"
   echo "  - down"
   echo "  - clear"
+  echo "  - customs"
 }
 
 case "$MODE" in
@@ -35,6 +36,7 @@ case "$MODE" in
     -o orderer.coffeeshop.com:7050 \
     -c $CHANNEL_NAME \
     -f /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts/${CHANNEL_NAME}.tx \
+    --outputBlock /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts/${CHANNEL_NAME}.block \
     --tls true \
     --cafile $CAFILE
     ;;
