@@ -6,7 +6,7 @@ FABRIC_CFG_PATH=$PWD
 
 function help(){
   echo "Usage: "
-  echo "  network.sh <cmd>"
+  echo "  ./builder.sh <cmd>"
   echo "cmd: "
   echo "  - network"
   echo "  - channel"
