@@ -1,8 +1,6 @@
 #!/bin/bash
 
 MODE=$1
-CHANNEL_NAME="c1"
-FABRIC_CFG_PATH=$PWD
 
 function help(){
   echo "Usage: "

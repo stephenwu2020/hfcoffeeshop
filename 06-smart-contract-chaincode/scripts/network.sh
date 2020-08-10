@@ -4,7 +4,6 @@ MODE=$1
 CRYPTOGEN=../bin/cryptogen
 CONFIGTXGEN=../bin/configtxgen
 CHANNEL_NAME="c1"
-FABRIC_CFG_PATH=$PWD
 CAFILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/coffeeshop.com/orderers/orderer.coffeeshop.com/msp/tlscacerts/tlsca.coffeeshop.com-cert.pem
 
 function help(){

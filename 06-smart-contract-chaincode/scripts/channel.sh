@@ -74,6 +74,7 @@ elif [ "$MODE" == "anchor" ]; then
 elif [ "$MODE" == "info" ]; then
   showChanInfo
 elif [ "$MODE" == "custom" ]; then
+  sleep 5
   createChan
   sleep 5
   joinChan

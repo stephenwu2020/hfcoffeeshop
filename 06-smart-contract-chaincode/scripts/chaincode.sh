@@ -37,7 +37,7 @@ function package(){
 
     echo "package chaincode"
     peer lifecycle chaincode package ${CHAINCODE_NAME}.tar.gz \
-      --path github.com/hyperledger/fabric-samples/chaincode/abstore/go/ \
+      --path /opt/gopath/src/github.com/hyperledger/fabric-samples/chaincode/abstore/go \
       --lang golang \
       --label abstore_1
 
